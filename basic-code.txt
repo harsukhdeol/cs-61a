@@ -1,0 +1,131 @@
+Computer programs consist of instructions to:
+- compute value
+- carry out action 
+
+Statements: describe actions
+Expressions: describe computations
+
+functions are objects, objects are functions, and interpreters are instances of both.
+
+Every language has:
+
+primitive expressions and statements, which represent the simplest building blocks that the language provides,
+means of combination - build compound elements from simple ones
+means of abstraction - how compound elements named and used as units
+
+
+Infix notation -  operator (e.g., +, -, *, or /) between operands (numbers)
+
+Call expressions - applies function to args
+Function expressions can take arbitrary amount of args, explicitly nest expressions
+
+If value given name, name binds to that value - use assignment statement (=) / import statements
+Assignment - simplest form of abstraction - use name to refer to output of compound operations
+
+Environment - memory created to keep track of names, bindings and values
+cangive new names to existing functions
+
+
+Python evaluates the expression to the right of = before changing the binding to the name on the left. 
+We can also assign multiple values to multiple names in a single statement, where names on the left of = and expressions on the right of = are separated by commas.
+
+>>> area, circumference = pi * radius * radius, 2 * pi * radius
+
+Functions
+def square(x)
+    return mul(x,x) - indent required
+
+Environments
+An environment in which an expression is evaluated consists of a sequence of frames, depicted as boxes. Each frame contains bindings, each of which associates a name with its corresponding value.
+The name of a function is repeated twice, once in the frame and again as part of the function itself. The name appearing in the function is called the intrinsic name. The name in a frame is a bound name. There is a difference between the two: different names may refer to the same function, but that function itself has only one intrinsic name.
+- user defined functions create local frame - only accessible to function
+We say that the scope of a local name is limited to the body of the user-defined function that defines it.
+
+
+Aspects of a functional abstraction.
+    domain-  set of arguments it can take
+    range -  set of values it can return
+    intent - relationship it computes between inputs and output (including side effects)
+
+/ = results floating point division // - rounds down
+
+docstring - function documentation - triple """
+def pressure(v, t, n= 6.02):
+        """Compute the pressure in pascals of an ideal gas.
+
+        Applies the ideal gas law: http://en.wikipedia.org/wiki/Ideal_gas_law
+
+        v -- volume of gas, in cubic meters
+        t -- absolute temperature in degrees kelvin
+        n -- particles of gas
+        """
+        k = 1.38e-23  # Boltzmann's constant
+        return n * k * t / v
+
+comment #
+
+if <expression>:
+    <suite>
+elif <expression>:
+    <suite>
+else:
+    <suite>
+
+Testing
+
+Assertions
+
+    An assert statement has an expression in a boolean context, followed by a quoted line of text (single or double quotes are both fine, but be consistent) that will be displayed if the expression evaluates to a false value.
+
+>>> assert fib(8) == 13, 'The 8th Fibonacci number should be 13'
+
+Doctests
+ Placing simple tests directly in the docstring of a function.
+  The first line of a docstring should contain a one-line description of the function, followed by a blank line. 
+  A detailed description of arguments and behavior may follow
+  May include a sample interactive session that calls the function:
+
+>>> def sum_naturals(n):
+        """Return the sum of the first n natural numbers.
+
+        >>> sum_naturals(10)
+        55
+        >>> sum_naturals(100)
+        5050
+        """
+        total, k = 0, 1
+        while k <= n:
+            total, k = total + k, k + 1
+        return total
+
+Interaction can be verified via the doctest module. Below, the globals function returns a representation of the global environment, which the interpreter needs in order to evaluate expressions.
+
+>>> from doctest import testmod
+>>> testmod()
+TestResults(failed=0, attempted=2)
+
+Use a doctest function run_docstring_examples for testing simple fxns
+First argument is the function to test
+Second should always be the result of the expression globals(), a built-in function that returns the global environment
+Third argument is True to indicate that we would like "verbose" output: a catalog of all tests run.
+
+>>> from doctest import run_docstring_examples
+>>> run_docstring_examples(sum_naturals, globals(), True)
+Finding tests in NoName
+Trying:
+    sum_naturals(10)
+Expecting:
+    55
+ok
+Trying:
+    sum_naturals(100)
+Expecting:
+    5050
+ok
+When the return value of a function does not match the expected result, the run_docstring_examples function will report this problem as a test failure.
+
+When writing Python in files, all doctests in a file can be run by starting Python with the doctest command line option:
+
+python3 -m doctest <python_source_file>
+
+Test that applies a single function =  unit test
